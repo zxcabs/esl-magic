@@ -22,10 +22,11 @@
 	<script type="text/javascript">
 		var loaderR = function() {
 			var d=document;
-			var ce='createElement';
-			var ac='appendChild';
-			var c=d[ce]('div');
-			var s=d[ce]('script');
+				ce='createElement',
+				ac='appendChild',
+				c=d[ce]('div'),
+				s=d[ce]('script');
+			c.id='rzct';
 			s.src='http://esl.redzerg.ru/js/loader.js';
 			s.type='text/javascript';
 			s.charset='utf8';
@@ -34,11 +35,12 @@
 		};
 		
 		var loaderV = function() {
-			var d=document;
-			var ce='createElement';
-			var ac='appendChild';
-			var c=d[ce]('div');
-			var s=d[ce]('script');
+			var d=document,
+				ce='createElement',
+				ac='appendChild',
+				c=d[ce]('div'),
+				s=d[ce]('script');
+			c.id='rzct';
 			s.src='http://esl.redzerg.virtual/js/loader.js';
 			s.type='text/javascript';
 			s.charset='utf8';
