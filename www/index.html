@@ -20,7 +20,7 @@
 	</style>
 
 	<script type="text/javascript">
-		var loaderR = function() {
+		var loader = function() {
 			var d=document;
 				ce='createElement',
 				ac='appendChild',
@@ -33,22 +33,6 @@
 			c[ac](s);
 			d.body[ac](c);
 		};
-		
-		var loaderV = function() {
-			var d=document,
-				ce='createElement',
-				ac='appendChild',
-				c=d[ce]('div'),
-				s=d[ce]('script');
-			c.id='rzct';
-			s.src='http://esl.redzerg.virtual/js/loader.js';
-			s.type='text/javascript';
-			s.charset='utf8';
-			c[ac](s);
-			d.body[ac](c);
-		};
-		
-		var loader = (window.location.host.match(/\.virtual$/))? loaderV: loaderR;
 	</script>
 </head>
 <body>
