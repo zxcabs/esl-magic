@@ -5,16 +5,58 @@
 	
 	function EventMachine (opt) {
 		this._opt = opt || {};
+		this._sub = {};
+		this._pub = [];
+		
+		this._proc();
 	};
 	
-	//Publish msg
-	EventMachine.prototype.pub = function (name, data) {
+	//Emit event 
+	EventMachine.prototype.emit = function (name, data) {
+		if (name && typeof(name) == 'string') {
+			this._pub.push({n: name, d: data});
+		};
 	};
 	
-	//Subscribe
-	EventMachine.prototype.sub = function (name, callback) {
+	//Listen event
+	EventMachine.prototype.on = function (name, callback) {
+		if (name && typeof(name) == 'string' && callback && typeof(callback) == 'function') {
+			var subarr = this._sub[name] = this._sub[name] || new Array();
+			subarr.push(callback);
+		};
 	};
 	
-	rz.EventMachine = EventMachine;
-	rz.scriptLoaded('EventMachine');
+	EventMachine.prototype._tick = function (callback) {
+		var arr = this._pub;
+		this._pub = new Array();
+		
+		var tack = function (callback) {
+			var e = arr.pop();
+			
+			if (e) {
+				if (this._sub[e.n]) {
+					var subarr = this._sub[e.n];
+					for (var i in subarr) {
+						if (subarr[i]) subarr[i](e.d);
+					}
+				};
+				
+				delete (e);
+				setTimeout(function() {tack.call(this, callback)}.bind(this), 0);
+			} else {
+				delete (arr);
+				return (callback)? callback.call(this): null;
+			};
+		};
+		
+		tack.call(this, callback);
+	};
+	
+	EventMachine.prototype._proc = function () {
+		setTimeout(function() {
+			this._tick(this._proc);
+		}.bind(this), 0);
+	};
+
+	rz.scriptLoaded('EventMachine', EventMachine);
 })();

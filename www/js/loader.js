@@ -10,11 +10,10 @@
 	};
 	
 	var container = null;
-	var jQuery = window.jQuery;
-	
+
 	var _scriptLoadEvents = {};
-	function scriptLoaded (name) {
-		if (name && _scriptLoadEvents[name]) _scriptLoadEvents[name]();
+	function scriptLoaded (name, data) {
+		if (name && _scriptLoadEvents[name]) _scriptLoadEvents[name](data);
 	};
 	
 	function getContainer () {
@@ -62,18 +61,9 @@
 	};
 	
 	function loader () {
-		var host = window.location.host;
-		if (!host && !host.match(/esl\.eu$/gi)) return false;
-
-		if (!jQuery || (jQuery && jQuery.fn && parseFloat(jQuery.fn.jquery) < 1.5)) {
-			include('http://code.jquery.com/jquery-1.6.1.min.js');
-		};
-		
-		if (!rz.EM) {
-			include('http://esl.redzerg.ru/js/EventMachine.js', function () {
-				alert('EM load');
-			});
-		};
+		include('http://esl.redzerg.ru/js/Core.js', function () {
+			//alert('Go go');
+		});
 	};
 	
 	function log(msg) {
