@@ -22,16 +22,21 @@
 	<script type="text/javascript">
 		var loader = function() {
 			var d=document;
-				ce='createElement',
-				ac='appendChild',
-				c=d[ce]('div'),
-				s=d[ce]('script');
-			c.id='rzct';
-			s.src='http://esl.redzerg.ru/js/loader.js';
-			s.type='text/javascript';
-			s.charset='utf8';
-			c[ac](s);
-			d.body[ac](c);
+				c='create',
+				e='Element',
+				i='rzct',
+				a='appendChild',
+				z=s='';
+			if(!d['get'+e+'ById'](i)){
+				z=d[c+e]('div');
+				z.id=i;
+				s=d[c+e]('script');
+				s.src='http://esl.redzerg.ru/js/loader.js';
+				s.type='text/javascript';
+				s.charset='utf8';
+				z[a](s);
+				d.body[a](z)
+			}
 		};
 	</script>
 </head>
