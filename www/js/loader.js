@@ -13,7 +13,7 @@
 
 	var _scriptLoadEvents = {};
 	function scriptLoaded (name, data) {
-		if (name && _scriptLoadEvents[name]) _scriptLoadEvents[name](data);
+		if (name && _scriptLoadEvents[name]) _scriptLoadEvents[name](data, name);
 	};
 	
 	function getContainer () {
@@ -39,14 +39,15 @@
 		
 		switch (type) {
 			case '.js':
+				name = (url.match(/[a-zA-Z0-9.-]+$/i))? url.match(/[a-zA-Z0-9.-]+$/i)[0].replace(/\.\w+$/i, ''): 'rz' + Math.random();
 				if (callback && typeof(callback) == 'function') {
-					name = (url.match(/\w+\.\w+$/i))? url.match(/\w+\.\w+$/i)[0].replace(/\.\w+$/i, ''): 'unknown';
 					_scriptLoadEvents[name] = callback;
 				};
 				
 				el = document.createElement('script');
 				el.type='text/javascript';
 				el.charset='utf8';
+				el.id=name;
 				el.src=url;
 				getContainer().appendChild(el);
 				break;
