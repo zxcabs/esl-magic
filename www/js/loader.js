@@ -40,8 +40,11 @@
 		
 		switch (type) {
 			case '.js':
-				name = (url.match(/\w+\.\w+$/i))? url.match(/\w+\.\w+$/i)[0].replace(/\.\w+$/i, ''): 'unknown';
-				_scriptLoadEvents[name] = callback;
+				if (callback && typeof(callback) == 'function') {
+					name = (url.match(/\w+\.\w+$/i))? url.match(/\w+\.\w+$/i)[0].replace(/\.\w+$/i, ''): 'unknown';
+					_scriptLoadEvents[name] = callback;
+				};
+				
 				el = document.createElement('script');
 				el.type='text/javascript';
 				el.charset='utf8';
