@@ -30,15 +30,17 @@
 	};
 	
 	DataProvider.prototype._getData = function () {this.error('getData(),  doesn\'t select!')};
-	DataProvider.prototype._parseData = function () {this.error('_parseData(),  doesn\'t select!')};
+	DataProvider.prototype._parseData = function () {this.error('parseData(),  doesn\'t select!')};
 	
 	DataProvider.prototype._getDataESL = function () {
 		this.log('get esl data');
-		this._core.emit('loadData');
+		this._core.emit('endLoad');
+		this._parseData('some data');
 	};
 	
-	DataProvider.prototype._parseDataESL = function () {
+	DataProvider.prototype._parseDataESL = function (data) {
 		this.log('parseDataESL');
+		this._core.emit('endParse');
 	};
 	
 	DataProvider.prototype.log = function (msg) {rz.log('DataProvider: ' + msg)};

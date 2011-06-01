@@ -16,6 +16,8 @@
 			return null;
 		};
 		
+		this._opt.updateInterval = this._opt.updateInterval || 15000; //15sec for test
+		
 		this._em = null;
 		this._dataprov = null;
 		
@@ -25,6 +27,8 @@
 
 		this.include('http://esl.redzerg.ru/js/EventMachine.js', function (EventMachine) {
 			this._em = new EventMachine();
+			
+			this.on('endParse', this._proc.bind(this));
 
 			this.include('http://esl.redzerg.ru/js/DataProvider.js', function (DataProvider) {
 				//TODO: type must bee get on host
@@ -37,7 +41,14 @@
 	//private
 	Core.prototype._ready = function (data) {
 		this.emit('coreReady', "some data");
+		this.emit('getData');
 		this.log('ready');
+	};
+	
+	Core.prototype._proc = function () {
+		setTimeout(function () {
+			this.emit('getData');
+		}.bind(this), this._opt.updateInterval);
 	};
 	///////////private
 	
