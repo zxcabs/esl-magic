@@ -3,6 +3,8 @@
 	var rz = window._rz_;
 	if (!rz || rz.DataProvider) return false;
 	
+	var $ = window.jQuery;
+	
 	function DataProvider (opt) {
 		if (!opt && !opt.core && !(opt.core instanceof rz.CCore)) {
 			this.error('Core undefined');
@@ -20,6 +22,7 @@
 		};
 		
 		this._core.on('getData', this._getData.bind(this));
+		this._core.on('endLoad', this._parseData.bind(this));
 		
 		this._ready();
 	};
@@ -33,9 +36,19 @@
 	DataProvider.prototype._parseData = function () {this.error('parseData(),  doesn\'t select!')};
 	
 	DataProvider.prototype._getDataESL = function () {
-		this.log('get esl data');
-		this._core.emit('endLoad');
-		this._parseData('some data');
+		this.log('_getDataESL');
+		
+		$.ajax({
+				url: this._core.path,
+				type: 'xml'
+			}
+		).done(function (data) {
+				this._core.emit('endLoad', data)
+			}.bind(this)
+		).fail(function () {
+			this.error('load faild');
+			this._core.emit('endParse');
+		}.bind(this));
 	};
 	
 	DataProvider.prototype._parseDataESL = function (data) {
