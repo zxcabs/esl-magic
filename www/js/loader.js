@@ -68,13 +68,18 @@
 	};
 	
 	function log(msg) {
-		alert(msg);
+		if(console && console.log) console.log(msg);
+	};
+	
+	function error(msg) {
+		if(console && console.error) console.error(msg);
 	};
 	
 	rz.getContainer = getContainer;
 	rz.include = include;
 	rz.loader = loader;
 	rz.log = log;
+	rz.error = error;
 	rz.scriptLoaded = scriptLoaded;
 
 	loader();
