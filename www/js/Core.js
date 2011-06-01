@@ -4,16 +4,17 @@
 	if (!rz || rz.core) return false;
 	
 	var host = window.location.host;
+	var path = window.location.pathname;
 	var jQuery = window.jQuery;
 	
 	
 	//Core
 	function Core (opt) {
 		this._opt = opt || {};
-		//Uncomment this 
-		// if (!this._opt.host || this._opt.host && !this._opt.host.match(/esl\.eu/gi)) {
-			// return null;
-		// }
+		if (!this._opt.host || this._opt.host && !this._opt.host.match(/esl\.eu/gi) || 
+			!this._opt.path || this._opt.path && !this._opt.path.match(/rankings/gi)) {
+			return null;
+		};
 		
 		this._em = null;
 		this._dataprov = null;
@@ -24,23 +25,31 @@
 
 		this.include('http://esl.redzerg.ru/js/EventMachine.js', function (EventMachine) {
 			this._em = new EventMachine();
-			this.on('coreReady', this._ready.bind(this));
-			
+
 			this.include('http://esl.redzerg.ru/js/DataProvider.js', function (DataProvider) {
-				this._dataprov = new DataProvider();
-				this.emit('coreReady', "some data");
+				//TODO: type must bee get on host
+				this._dataprov = new DataProvider({core: this, type: 'ESL'});
+				this._ready();
 			}.bind(this));
 		}.bind(this));
 	};
 	
 	//private
 	Core.prototype._ready = function (data) {
+		this.emit('coreReady', "some data");
 		this.log('ready');
-		this.ready(data);
 	};
 	///////////private
 	
 	//public
+	Core.prototype.__defineGetter__('host', function(){
+		return this._opt.host;
+	});
+	
+	Core.prototype.__defineGetter__('path', function(){
+		return this._opt.path;
+	});
+	
 	Core.prototype.on = function (name, callback) {
 		if (this._em) {
 			this._em.on(name, callback);
@@ -68,6 +77,7 @@
 	/////////overwrite
 	////////////////////////Core
 	
-	rz.core = new Core({host: host});
-	rz.scriptLoaded('Core');
+	rz.CCore = Core;
+	rz.core = new Core({host: host, path: path});
+	rz.scriptLoaded('Core', Core);
 })();
