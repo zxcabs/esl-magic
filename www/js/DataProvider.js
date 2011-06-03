@@ -82,14 +82,38 @@
 			var $trs = $('tr', $tbl);
 			var rcount = $('td.TextS', $trs[0]).length;
 			
+			//round cof, need to calculate math number in round
+			var rk = new Array();
+			
+			//init round cof
+			for(var i = 0; i < rcount; i++) {
+				rk[i] = -1;
+			};
+			
 			//TODO: async parse
 			for (var i = 2; i < $trs.length; i++) {
 				var $tds = $('td', $trs[i]);
-				var r = rcount - (parseInt($($tds[$tds.length - 1]).attr('colspan')) / 2)  + 1;
-				//TODO: parse
-				r;
-			}
+				var round = rcount - (parseInt($($tds[$tds.length - 1]).attr('colspan')) / 2)  + 1;
+				var k = rk[round-1] = -rk[round-1];
+				var mid = i + k * Math.pow(2, round - 1);
+				var j = (round <= 2)? round - 1: 2;
+				var v = (j != 0)? j - 1: null; 
 			
+				var o = {
+					tName     : name,
+					mathId    : mid,
+					round     : round,
+					playerId  : i,
+					playerHTML: $('div', $tds[j]).html()
+				};
+				
+				if (v) {
+					o['vId'] = i;
+					o['vHTML'] = $('a', $tds[v]);
+				};
+			
+				this._core.emit('parseMath', o);
+			}
 		} else {
 			this.error('table ' + name + ' is null');
 		};

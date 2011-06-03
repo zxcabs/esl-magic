@@ -43,8 +43,9 @@
 			if (e) {
 				if (this._sub[e.n]) {
 					var subarr = this._sub[e.n];
+					
 					for (var i in subarr) {
-						if (subarr[i]) subarr[i](e.d);
+						if (subarr[i] && !subarr[i](e.d)) break;
 					}
 				};
 				
@@ -85,7 +86,12 @@
 		}
 
 		this._em = new EventMachine();
-			
+		
+		this.on('endParse', this._proc.bind(this));
+		
+		//TODO: this is for test, remove it!
+		this.on('parseMath', function(o) { this.log(o.tName + ' - '+ o.mathId + ' - ' + o.playerHTML) }.bind(this));
+		
 		this.include('http://esl.redzerg.ru/js/DataProvider.js', function (DataProvider) {
 			//TODO: type must bee get on host
 			this._dataprov = new DataProvider({core: this, type: 'ESL'});
