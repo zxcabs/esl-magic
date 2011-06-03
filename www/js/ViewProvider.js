@@ -6,7 +6,15 @@
 	var $ = window.jQuery;
 	
 	function ViewProvider(opt) {
+		if (!opt && !opt.core && !(opt.core instanceof rz.CCore)) {
+			this.error('Core undefined');
+			return false;
+		};
+		
 		this._opt = opt || {};
+		this._core = this._opt.core;
+		
+		//TODO: complite !!!!!!!!!!!!!
 	};
 	
 	ViewProvider.prototype._createContainer = function (o) {

@@ -80,6 +80,7 @@
 		
 		this._em = null;
 		this._dataprov = null;
+		this._viewprov = null;
 		
 		if (!jQuery || jQuery && parseInt(jQuery.fn.jquery.replace(/\./g, '')) < 151) {
 			this.include('http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js');
@@ -95,7 +96,13 @@
 		this.include('http://esl.redzerg.ru/js/DataProvider.js', function (DataProvider) {
 			//TODO: type must bee get on host
 			this._dataprov = new DataProvider({core: this, type: 'ESL'});
-			this._ready();
+			if (this._viewprov) this._ready();
+		}.bind(this));
+		
+		this.include('http://esl.redzerg.ru/js/ViewProvider.js', function (ViewProvider) {
+			//TODO: type must bee get on host
+			this._viewprov = new ViewProvider({core: this, type: 'ESL'});
+			if (_dataprov) this._ready();
 		}.bind(this));
 	};
 	
