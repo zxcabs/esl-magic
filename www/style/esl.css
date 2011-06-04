@@ -10,8 +10,12 @@
 	height: 16px; 
 	display: block;
 }
+
+.rz_player  img{
+	margin-right: 4px;
+}
 	
-.rz_playerBox {
+.rz_match {
 	width:144px; 
 	display:inline-block; 
 	float:left; 
@@ -20,10 +24,11 @@
 	border:1px solid black; 
 	background:#f5f4f3; 
 	text-align:left;
+	padding-top: 2px;
 }
 
-.rz_headBotton {
-	width:66px; 
+.rz_head .rz_round{
+	width:80px; 
 	display:inline-block; 
 	position:relative; 
 	background:#e3e0dd; 
@@ -31,7 +36,7 @@
 	border:1px solid #cccccc;
 }
 
-.rz_headBotton:hover {
+.rz_head .rz_round:hover {
 	background:#cccccc;
 }
 

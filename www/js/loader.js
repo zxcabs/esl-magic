@@ -52,7 +52,11 @@
 				getContainer().appendChild(el);
 				break;
 			case '.css':
-				//TODO: need do?
+				el = document.createElement('link');
+				el.type = 'text/css';
+				el.href = url;
+				el.rel = 'stylesheet';
+				getContainer().appendChild(el);
 				break;
 			default:
 				return false;

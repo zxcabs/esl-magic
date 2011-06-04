@@ -61,7 +61,12 @@
 							(o.round == o.totalRound - 2)? '1/2 финала':
 								(o.round == o.totalRound - 3)? '1/4 финала': 'Раунд ' + o.round;
 							
-			$('<span class="rz_round rz_round' + o.round + '">' + str + '</span>').appendTo($('.rz_head', $t));
+			var $rh = $('<span class="rz_round rz_round' + o.round + '">' + str + '</span>').appendTo($('.rz_head', $t));
+			
+			$rh.bind('click', o.round, function(e) {
+				$('.rz_roundC', $t).hide();
+				$('.rz_roundC' + e.data, $t).show();
+			});
 			
 			if ($r.length == 0) {
 				$r = $('<div class="rz_roundC rz_roundC'+ o.round +'"></div>').appendTo($('.rz_body', $t));
@@ -78,6 +83,8 @@
 		var $p = $('.rz_player' + o.playerId, $r);
 		if ($p.length == 0) $p = $('<div class="rz_player rz_player'+ o.playerId +'"></div>').appendTo($m);
 		$p.html(o.playerHTML);
+		
+		if (o.playerWinner) $p.addClass('TextMB');
 	};
 	
 	ViewProvider.prototype.log = function (msg) {rz.log('ViewProvider: ' + msg)};

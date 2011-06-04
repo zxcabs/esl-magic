@@ -100,12 +100,13 @@
 				var v = (j != 0)? j - 1: null; 
 			
 				var o = {
-					tName     : name,
-					matchId   : mid,
-					round     : round,
-					totalRound: rcount,
-					playerId  : i,
-					playerHTML: $('div', $tds[j]).html()
+					tName       : name,
+					matchId     : mid,
+					round       : round,
+					totalRound  : rcount,
+					playerId    : i,
+					playerHTML  : $('div', $tds[j]).html(),
+					playerWinner: ($($tds[j]).hasClass('TextMB'))? true: false
 				};
 				
 				if (v) {

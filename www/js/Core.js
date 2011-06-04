@@ -84,13 +84,12 @@
 		//TODO: type must bee get on host
 		this._type = 'ESL';
 		
+		this._em = new EventMachine();
+		this.on('endParse', this._proc.bind(this));
+
 		if (!jQuery || jQuery && parseInt(jQuery.fn.jquery.replace(/\./g, '')) < 151) {
 			this.include('http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js');
 		}
-
-		this._em = new EventMachine();
-		
-		this.on('endParse', this._proc.bind(this));
 		
 		//TODO: this is for test, remove it!
 		//this.on('parseMatch', function(o) { this.log(o.tName + ' - '+ o.mathId + ' - ' + o.playerHTML) }.bind(this));
@@ -104,6 +103,8 @@
 			this._viewprov = new ViewProvider({core: this, type: this._type});
 			if (this._dataprov) this._ready();
 		}.bind(this));
+		
+		this.include('http://esl.redzerg.ru/style/'+ this._type.toLowerCase() +'.css');
 	};
 	
 	//private
