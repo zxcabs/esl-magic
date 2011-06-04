@@ -33,7 +33,8 @@
 	
 	ViewProvider.prototype._initESL = function () {
 		var $t = $('#main_content table');
-		$t.width('740px');
+		$t.attr('style', '');
+		$t.addClass('rz_table');
 		$t.html('<div class="rz_head"></div><div class="rz_body">Идет загрузка...</div>');
 		
 		this._$t = {
@@ -78,13 +79,31 @@
 		};
 		
 		var $m = $('.rz_match' + o.matchId, $r);
-		if ($m.length == 0) $m = $('<span class="rz_match rz_match'+ o.matchId +'"></span>').appendTo($r);
+		if ($m.length == 0) {
+			$m = $('<span class="rz_match rz_match'+ o.matchId +'"></span>').appendTo($r);
+			
+			$('<div class="rz_vs"></div>').appendTo($m)
+			if (o.round != o.totalRound) {
+				$next = $('<div class="rz_next">&rArr;</div>').appendTo($m);
+			}
+			
+		}
 		
-		var $p = $('.rz_player' + o.playerId, $r);
-		if ($p.length == 0) $p = $('<div class="rz_player rz_player'+ o.playerId +'"></div>').appendTo($m);
-		$p.html(o.playerHTML);
+		
+		var $p = $('.rz_player' + o.playerId + ' .rz_playerHTML', $r);
+		if ($p.length == 0) {
+			$p = $('<div class="rz_player rz_player'+ o.playerId +'"></div>').appendTo($m);
+			
+			$prev = $('<div class="rz_prev">' + ((o.round != 1)?'&lArr;': '&nbsp;' )+'</div>').appendTo($p);
+			$p = $('<div class="rz_playerHTML"></div>').appendTo($p);
+		}
 		
 		if (o.playerWinner) $p.addClass('TextMB');
+		$p.html(o.playerHTML);
+		
+		if (o.vHTML) {
+			$('.rz_match'+ o.vId +' .rz_vs', $t).html(o.vHTML);
+		}
 	};
 	
 	ViewProvider.prototype.log = function (msg) {rz.log('ViewProvider: ' + msg)};

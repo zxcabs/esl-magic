@@ -1,3 +1,7 @@
+.rz_table {
+	width: 750px;
+}
+
 .rz_head {
 	width:100%;
 }
@@ -9,6 +13,14 @@
 .rz_player {
 	height: 16px; 
 	display: block;
+	position: relative;
+}
+
+.rz_playerHTML {
+	height: 16px; 
+	display: inline-block;
+	position: relative;
+	left: 16px;
 }
 
 .rz_player  img{
@@ -24,7 +36,7 @@
 	border:1px solid black; 
 	background:#f5f4f3; 
 	text-align:left;
-	padding-top: 2px;
+	padding-top: 4px;
 }
 
 .rz_head .rz_round{
@@ -48,25 +60,33 @@
 .rz_vs {
 	display:inline-block;
 	float:left;
-	padding-top:8px;
+	padding-top: 6px;
 	text-align:center;
 	width:16px;
+	position: relative;
+	z-index: 100;
 }
 
 .rz_prev {
 	color:#000000;
-	display:inline-block;
 	cursor:pointer;
 	font-weight:bolder;
+	display: inline-block;
+	position: absolute;
+	top: -3px;
+	left: 16px;
+	z-index: 100;
 }
 
 .rz_next {
-	color:#000000;
-	display:inline-block;
-	cursor:pointer;
-	margin-top:-25px;
-	position:absolute;
-	margin-left:126px;
+	color: #000000;
+	cursor: pointer;
+	margin-top: 5px;
+	position: absolute;
+	margin-left: 130px;
+	height: 16px;
+	width: 16px;
+	z-index: 100;
 }
 
 .rz_focus {

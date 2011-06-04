@@ -109,7 +109,7 @@
 					playerWinner: ($($tds[j]).hasClass('TextMB'))? true: false
 				};
 				
-				if (v) {
+				if (v != null) {
 					o['vId'] = i;
 					o['vHTML'] = $('a', $tds[v]);
 				};

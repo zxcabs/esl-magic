@@ -85,6 +85,7 @@
 		this._type = 'ESL';
 		
 		this._em = new EventMachine();
+		//TODO: uncomment
 		this.on('endParse', this._proc.bind(this));
 
 		if (!jQuery || jQuery && parseInt(jQuery.fn.jquery.replace(/\./g, '')) < 151) {
