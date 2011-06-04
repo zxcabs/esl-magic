@@ -16,15 +16,17 @@
 		
 		if(this['_init' + this._opt.type]) this._init = this['_init' + this._opt.type];
 		if(this['_onParseMatch' + this._opt.type]) this._onParseMatch = this['_onParseMatch' + this._opt.type];
+		if(this['_showMatch' + this._opt.type]) this._showMatch = this['_showMatch' + this._opt.type];
+		
 		
 		this._core.on('parseMatch', this._onParseMatch.bind(this));
+		this._core.on('showMatch', this._showMatch.bind(this));
 		this._init();
-		//TODO: complite !!!!!!!!!!!!!
 	};
 	
 	ViewProvider.prototype._init = function () {this.error('init(): doesn`t selected!')};
 	ViewProvider.prototype._onParseMatch = function () {this.error('onParseMatch doesn`t selected!')};
-	ViewProvider.prototype._createContainer = function () {};
+	ViewProvider.prototype._showMatch = function () {this.error('showMatch doesn`t selected!')};
 	
 	ViewProvider.prototype._ready = function () {
 		this._core.emit('viewprovReady');
@@ -61,21 +63,19 @@
 						(o.round == o.totalRound - 1)? 'Финал': 
 							(o.round == o.totalRound - 2)? '1/2 финала':
 								(o.round == o.totalRound - 3)? '1/4 финала': 'Раунд ' + o.round;
-							
-			var $rh = $('<span class="rz_round rz_round' + o.round + '">' + str + '</span>').appendTo($('.rz_head', $t));
-			
-			$rh.bind('click', o.round, function(e) {
-				$('.rz_roundC', $t).hide();
-				$('.rz_roundC' + e.data, $t).show();
-			});
-			
+								
 			if ($r.length == 0) {
 				$r = $('<div class="rz_roundC rz_roundC'+ o.round +'"></div>').appendTo($('.rz_body', $t));
 				if (o.round != 1) $r.hide();
 				
 				$('<div><h2>' + str + '</h2></div>').appendTo($r);
 				$r = $('<div class="rz_matchC"></div>').appendTo($r);
-			};
+			};					
+			
+			var $th = $('<span class="rz_round rz_round' + o.round + '">' + str + '</span>').appendTo($('.rz_head', $t));
+			$th.bind('click', {tName: o.tName, round: o.round, vp: this}, function (e) {
+				e.data.vp._core.emit('showMatch', e.data);
+			});
 		};
 		
 		var $m = $('.rz_match' + o.matchId, $r);
@@ -84,7 +84,11 @@
 			
 			$('<div class="rz_vs"></div>').appendTo($m)
 			if (o.round != o.totalRound) {
-				$next = $('<div class="rz_next">&rArr;</div>').appendTo($m);
+				var $next = $('<div class="rz_next">&rArr;</div>').appendTo($m);
+			
+				$next.bind('click', {tName: o.tName, round: o.round + 1, match: o.matchNext, vp: this}, function (e) {
+					e.data.vp._core.emit('showMatch', e.data);
+				});
 			}
 			
 		}
@@ -104,6 +108,15 @@
 		if (o.vHTML) {
 			$('.rz_match'+ o.vId +' .rz_vs', $t).html(o.vHTML);
 		}
+	};
+	
+	ViewProvider.prototype._showMatchESL = function (e) {
+		$('.rz_roundC', this._$t[e.tName]).hide();
+		$('.rz_roundC' + e.round, this._$t[e.tName]).show();
+		
+		if (e.match) {
+			$('.rz_match' + e.match, this._$t[e.tName]).addClass('rz_focus').bind('mouseout', function(){$(this).removeClass('rz_focus').unbind('mousemout');}).position();;
+		};
 	};
 	
 	ViewProvider.prototype.log = function (msg) {rz.log('ViewProvider: ' + msg)};

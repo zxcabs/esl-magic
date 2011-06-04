@@ -14,7 +14,7 @@
 		this._opt = opt;
 		this._core = this._opt.core;
 		
-		this._data = {};
+		this._matchInRound = {};
 		
 		if(this['_getData' + this._opt.type] && this['_parseData' + this._opt.type]) {
 			this._getData = this['_getData' + this._opt.type];
@@ -90,6 +90,9 @@
 				rk[i] = -1;
 			};
 			
+			var mrnum = {};
+			var mnum = {};
+			
 			//TODO: async parse
 			for (var i = 2; i < $trs.length; i++) {
 				var $tds = $('td', $trs[i]);
@@ -98,10 +101,19 @@
 				var mid = i + k * Math.pow(2, round - 1);
 				var j = (round <= 2)? round - 1: 2;
 				var v = (j != 0)? j - 1: null; 
-			
+				var mnk = mid;
+				
+				if (!mnum[mid]) {
+					mnum[mid] = mid;
+					mrnum[round] = (!mrnum[round])? 1: mrnum[round] + 1;
+				}				
+				
+				var nextM = mid + ((mrnum[round] % 2 != 0)? 1: -1) * Math.pow(2, round);
+				
 				var o = {
 					tName       : name,
 					matchId     : mid,
+					matchNext   : nextM,
 					round       : round,
 					totalRound  : rcount,
 					playerId    : i,

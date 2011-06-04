@@ -86,14 +86,11 @@
 		
 		this._em = new EventMachine();
 		//TODO: uncomment
-		this.on('endParse', this._proc.bind(this));
+		//this.on('endParse', this._proc.bind(this));
 
 		if (!jQuery || jQuery && parseInt(jQuery.fn.jquery.replace(/\./g, '')) < 151) {
 			this.include('http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js');
 		}
-		
-		//TODO: this is for test, remove it!
-		//this.on('parseMatch', function(o) { this.log(o.tName + ' - '+ o.mathId + ' - ' + o.playerHTML) }.bind(this));
 		
 		this.include('http://esl.redzerg.ru/js/DataProvider.js', function (DataProvider) {
 			this._dataprov = new DataProvider({core: this, type: this._type});
