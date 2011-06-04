@@ -101,8 +101,9 @@
 			
 				var o = {
 					tName     : name,
-					matchId    : mid,
+					matchId   : mid,
 					round     : round,
+					totalRound: rcount,
 					playerId  : i,
 					playerHTML: $('div', $tds[j]).html()
 				};

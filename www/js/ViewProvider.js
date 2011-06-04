@@ -54,13 +54,22 @@
 			this._isInit[o.tName] = true;
 		};
 		
-		if ($('.rz_head .rz_round' + o.round, $t).length == 0) 
-			$('<span class="rz_round rz_round' + o.round + '">Раунд ' + o.round + '</span>').appendTo($('.rz_head', $t));
+		var $r = $('.rz_body .rz_roundC' + o.round + ' .rz_matchC', $t);
+		if ($('.rz_head .rz_round' + o.round, $t).length == 0) {
+			var str = (o.round == o.totalRound)? 'Победитель': 
+						(o.round == o.totalRound - 1)? 'Финал': 
+							(o.round == o.totalRound - 2)? '1/2 финала':
+								(o.round == o.totalRound - 3)? '1/4 финала': 'Раунд ' + o.round;
+							
+			$('<span class="rz_round rz_round' + o.round + '">' + str + '</span>').appendTo($('.rz_head', $t));
 			
-		var $r = $('.rz_body .rz_roundC' + o.round, $t);
-		if ($r.length == 0) {
-			$r = $('<div class="rz_roundC rz_roundC'+ o.round +'"></div>').appendTo($('.rz_body', $t));
-			$r.hide();
+			if ($r.length == 0) {
+				$r = $('<div class="rz_roundC rz_roundC'+ o.round +'"></div>').appendTo($('.rz_body', $t));
+				if (o.round != 1) $r.hide();
+				
+				$('<div><h2>' + str + '</h2></div>').appendTo($r);
+				$r = $('<div class="rz_matchC"></div>').appendTo($r);
+			};
 		};
 		
 		var $m = $('.rz_match' + o.matchId, $r);

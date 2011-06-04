@@ -1,0 +1,71 @@
+.rz_head {
+	width:100%;
+}
+
+.rz_cls {
+	clear:both;
+}
+
+.rz_player {
+	height: 16px; 
+	display: block;
+}
+	
+.rz_playerBox {
+	width:144px; 
+	display:inline-block; 
+	float:left; 
+	position:relative; 
+	margin:2px; 
+	border:1px solid black; 
+	background:#f5f4f3; 
+	text-align:left;
+}
+
+.rz_headBotton {
+	width:66px; 
+	display:inline-block; 
+	position:relative; 
+	background:#e3e0dd; 
+	cursor:pointer; 
+	border:1px solid #cccccc;
+}
+
+.rz_headBotton:hover {
+	background:#cccccc;
+}
+
+.rz_rounds {
+	width:100%; 
+	background:#e3e0dd;
+}
+
+.rz_vs {
+	display:inline-block;
+	float:left;
+	padding-top:8px;
+	text-align:center;
+	width:16px;
+}
+
+.rz_prev {
+	color:#000000;
+	display:inline-block;
+	cursor:pointer;
+	font-weight:bolder;
+}
+
+.rz_next {
+	color:#000000;
+	display:inline-block;
+	cursor:pointer;
+	margin-top:-25px;
+	position:absolute;
+	margin-left:126px;
+}
+
+.rz_focus {
+	margin:0px;
+	border:3px solid #99cc99;
+	background:#aaccaa;
+}
