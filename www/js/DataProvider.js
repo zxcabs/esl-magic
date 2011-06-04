@@ -101,7 +101,7 @@
 			
 				var o = {
 					tName     : name,
-					mathId    : mid,
+					matchId    : mid,
 					round     : round,
 					playerId  : i,
 					playerHTML: $('div', $tds[j]).html()
@@ -112,7 +112,7 @@
 					o['vHTML'] = $('a', $tds[v]);
 				};
 			
-				this._core.emit('parseMath', o);
+				this._core.emit('parseMatch', o);
 			}
 		} else {
 			this.error('table ' + name + ' is null');

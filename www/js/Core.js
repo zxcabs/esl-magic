@@ -38,7 +38,7 @@
 		this._pub = new Array();
 		
 		var tack = function (callback) {
-			var e = arr.pop();
+			var e = arr.shift();
 			
 			if (e) {
 				if (this._sub[e.n]) {
@@ -81,6 +81,8 @@
 		this._em = null;
 		this._dataprov = null;
 		this._viewprov = null;
+		//TODO: type must bee get on host
+		this._type = 'ESL';
 		
 		if (!jQuery || jQuery && parseInt(jQuery.fn.jquery.replace(/\./g, '')) < 151) {
 			this.include('http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js');
@@ -91,18 +93,16 @@
 		this.on('endParse', this._proc.bind(this));
 		
 		//TODO: this is for test, remove it!
-		this.on('parseMath', function(o) { this.log(o.tName + ' - '+ o.mathId + ' - ' + o.playerHTML) }.bind(this));
+		//this.on('parseMatch', function(o) { this.log(o.tName + ' - '+ o.mathId + ' - ' + o.playerHTML) }.bind(this));
 		
 		this.include('http://esl.redzerg.ru/js/DataProvider.js', function (DataProvider) {
-			//TODO: type must bee get on host
-			this._dataprov = new DataProvider({core: this, type: 'ESL'});
+			this._dataprov = new DataProvider({core: this, type: this._type});
 			if (this._viewprov) this._ready();
 		}.bind(this));
 		
 		this.include('http://esl.redzerg.ru/js/ViewProvider.js', function (ViewProvider) {
-			//TODO: type must bee get on host
-			this._viewprov = new ViewProvider({core: this, type: 'ESL'});
-			if (_dataprov) this._ready();
+			this._viewprov = new ViewProvider({core: this, type: this._type});
+			if (this._dataprov) this._ready();
 		}.bind(this));
 	};
 	
