@@ -37,7 +37,8 @@
 		var $t = $('#main_content table');
 		$t.attr('style', '');
 		$t.addClass('rz_table');
-		$t.html('<div class="rz_head"></div><div class="rz_body">Идет загрузка...</div>');
+		$t.html('<div class="rz_head"></div><div class="rz_body">Идет загрузка...</div>' +
+				'<div class="rz_footer">ESL Magic: <a href="http://esl.redzerg.ru">esl.redzerg.ru</a> - v: ' + this._core.version + '</div>');
 		
 		this._$t = {
 			t0: $($t[0]),
@@ -98,7 +99,12 @@
 		if ($p.length == 0) {
 			$p = $('<div class="rz_player rz_player'+ o.playerId +'"></div>').appendTo($m);
 			
-			$prev = $('<div class="rz_prev">' + ((o.round != 1)?'&lArr;': '&nbsp;' )+'</div>').appendTo($p);
+			var $prev = $('<div class="rz_prev">' + ((o.round != 1)?'&lArr;': '&nbsp;' )+'</div>').appendTo($p);
+			
+			$prev.bind('click', {tName: o.tName, round: o.round - 1, match: o.playerId, vp: this}, function (e) {
+				e.data.vp._core.emit('showMatch', e.data);
+			});
+			
 			$p = $('<div class="rz_playerHTML"></div>').appendTo($p);
 		}
 		

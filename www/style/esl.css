@@ -2,7 +2,7 @@
 	width: 750px;
 }
 
-.rz_head {
+.rz_head,  .rz_footer {
 	width:100%;
 }
 
@@ -30,8 +30,6 @@
 .rz_match {
 	width:144px; 
 	display:inline-block; 
-	float:left; 
-	position:relative; 
 	margin:2px; 
 	border:1px solid black; 
 	background:#f5f4f3; 

@@ -76,8 +76,8 @@
 			return null;
 		};
 		
-		this._opt.updateInterval = this._opt.updateInterval || 15000; //15sec for test
-		
+		this.version = '0.2a';
+		this._opt.updateInterval = this._opt.updateInterval || 60000; //15sec for test
 		this._em = null;
 		this._dataprov = null;
 		this._viewprov = null;
@@ -85,8 +85,9 @@
 		this._type = 'ESL';
 		
 		this._em = new EventMachine();
+		
 		//TODO: uncomment
-		//this.on('endParse', this._proc.bind(this));
+		this.on('endParse', this._proc.bind(this));
 
 		if (!jQuery || jQuery && parseInt(jQuery.fn.jquery.replace(/\./g, '')) < 151) {
 			this.include('http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js');
