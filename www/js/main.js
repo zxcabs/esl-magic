@@ -16,6 +16,10 @@
 		rzHead.addClass('rz_head');
 		rzContainer.prepend(rzHead);
 		
+		var $note = $('<div class="rz_note">Вышла новая версия ESL Magic. Посетите <a href="http://esl.redzerg.ru/">esl.redzerg.ru</a> для обновления.</a>'
+						+ '<br>Подробности обновления читать на: <a href="http://vodportal.ru/zxcabs/2011/06/05/volshebnaya-knopka-esl-v02a.html">vodportal.ru</a></div>');
+		$note.insertBefore(rzContainer);
+		
 		for(var t in head) {
 			if (typeof(head[t]) == 'object' && head[t].nodeName && head[t].nodeName == 'TD') {
 				var d = $('div', head[t]).addClass('rz_headBotton');
@@ -156,6 +160,7 @@
 	
 	function setStyle() {
 		var style = "<style>"
+			+ " .rz_note {width:100%;height:40px;border:dashed 2px red;text-align: center;padding-top: 25px;margin-bottom: 20px;}"
 			+ " .rz_head {width:100%;}"
 			+ " .rz_cls {clear:both;}"
 			+ " .rz_player {height: 16px; display: block;}"
