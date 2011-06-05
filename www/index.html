@@ -1,39 +1,67 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+	<meta content="text/html; charset=UTF-8" http-equiv=Content-Type>
+	<meta name='description', content='ESL Magic. Простой набор скриптов изменяющий структуру отображения турнирных сеток, с древовидных на блочные.'>
+	<meta name='keywords', content='ESL Magic button, волшебная кнопка ESL, ESL Magic'>
+	<link href="img/favicon.ico" rel="icon" type="image/x-icon" />
+	<link href="img/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+	<title>redzerg.ru - ESL Magic</title>
+	<style>
+		*{border:0px;margin:0px;padding:0px;color:#ffffff;font-family:Verdana,sans-serif;line-height:20px;}
+		html, body{height:100%;}
+		#body{background:#000000 url('img/bg.jpg') no-repeat center;height:100%;}
+		#top{width:100%;background-color:#555555;position:absolute;top:0px;}
+		#middle{margin-left:auto;margin-right:auto;width:100%;position:relative;top:50%;font-size:14px;}
+		#middle .content{height:200px;margin-left:auto;margin-right:auto;position:relative;text-align:left;top:-100px;width:690px;}
+		#bottom{width:100%;height:20px;background-color:#555555;position:absolute;bottom:0px;}
+		#bottom .footer{text-align:right;}
+		#knopka{display:inline-block;}
+		#knopka a{color:#ffffff;text-decoration:none;border:2px dashed #ffffff;width:100px;text-align:center;display:block;}
+		ul{list-style-type:decimal;}
+	</style>
 
-<meta content="text/html; charset=UTF-8" http-equiv=Content-Type>
-<link href="img/favicon.ico" rel="icon" type="image/x-icon" />
-<link href="img/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-<title>redzerg.ru</title>
-<style>*{border:0px;margin:0px;padding:0px;color:#ffffff;font-family:Verdana,sans-serif;line-height:20px;}
-html, body{height:100%;}
-#body{background:#000000 url('/img/bg.jpg') no-repeat center;height:100%;}
-#top{width:100%;background-color:#555555;position:absolute;top:0px;}
-#middle{margin-left:auto;margin-right:auto;width:100%;position:relative;top:50%;font-size:14px;}
-#middle .content{height:200px;margin-left:auto;margin-right:auto;position:relative;text-align:left;top:-100px;width:690px;}
-#bottom{width:100%;height:20px;background-color:#555555;position:absolute;bottom:0px;}
-#bottom .footer{text-align:right;}
-#knopka{display:inline-block;}
-#knopka a{color:#ffffff;text-decoration:none;border:2px dashed #ffffff;width:100px;text-align:center;display:block;}
-ul{list-style-type:decimal;}</style>
+	<script type="text/javascript">
+		var loader = function() {
+			var d=document;
+				c='create',
+				e='Element',
+				i='rzct',
+				a='appendChild',
+				z=s='';
+			if(!d['get'+e+'ById'](i)){
+				z=d[c+e]('div');
+				z.id=i;
+				s=d[c+e]('script');
+				s.src='http://esl.redzerg.ru/js/loader.js';
+				s.type='text/javascript';
+				s.charset='utf8';
+				z[a](s);
+				d.body[a](z)
+			}
+		};
+	</script>
 </head>
 <body>
-<div id=body>
-<div id=top>alpha</div>
-<div id=middle>
-<div class=content>
-<ul>
-<li>Переместите <div id=knopka><a href="javascript:(function(){var c=document.createElement('div');document.body.appendChild(c);var jq=document.createElement('script');var rz=document.createElement('script');jq.src='http://code.jquery.com/jquery-1.5.min.js';rz.src='http://esl.redzerg.ru/js/main.js';rz.type=jq.type='text/javascript';rz.charset=jq.charset='utf8';c.appendChild(jq);c.appendChild(rz);})();">ESL Magic</a></div> в панель закладок браузера.</li>
-<li>Перейдите на страницу с сеткой ESL.</li>
-<li>Нажмите на кнопку 'ESL Magic' в панели закладок.</li>
-<li>Profit!</li>
-</ul>
-</div>
-</div>
-<div id=bottom>
-<div class=footer>admin@redzerg.ru</div>
-</div>
-</div>
+	<div id="body">
+		<div id="top">v0.2a</div>
+		<div id="middle">
+			<div class="content">
+				<ul>
+					<li>Переместите <div id="knopka"><a id="ESLMAGIC" href="#">ESL Magic</a></div> в панель закладок браузера.</li>
+					<li>Перейдите на страницу с сеткой ESL.</li>
+					<li>Нажмите на кнопку 'ESL Magic' в панели закладок.</li>
+					<li>Profit!</li>
+				</ul>
+			</div>
+		</div>
+		<div id="bottom">
+			<div class="footer"><a href="https://github.com/zxcabs/esl-magic">github.com</a> <a href="mailto:admin@redzerg.ru">admin@redzerg.ru</a></div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		var a = document.getElementById('ESLMAGIC');
+		a.href = "javascript:(" + loader.toString().replace(/\s{2,}/g, '') + ")();";
+	</script>
 </body>
 </html>
