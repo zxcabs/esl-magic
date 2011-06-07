@@ -59,14 +59,18 @@
 		var $main = $('#main_content', $(data));
 		var $tables = $('table', $main);
 		
-		if ($tables && $tables[0] && $tables[1]) {
+		if ($tables && $tables[0]) {
 			var t0 = $($tables[0]),
-				t1 = $($tables[1]);
+				t1 = ($tables[1])? $($tables[1]): null;
 			
 			this._parseESLTable('t0', t0, function () {
-				this._parseESLTable('t1', t1, function () {
+				if (t1) {
+					this._parseESLTable('t1', t1, function () {
+						this._core.emit('endParse');
+					}.bind(this));
+				} else {
 					this._core.emit('endParse');
-				}.bind(this));
+				};
 			}.bind(this));
 		} else {
 			this.error('no parse data');
