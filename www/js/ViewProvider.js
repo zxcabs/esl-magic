@@ -4,6 +4,7 @@
 	if (!rz || rz.ViewProvider) return false;
 	
 	var $ = window.jQuery;
+	var util = rz.util;
 	
 	function ViewProvider(opt) {
 		if (!opt && !opt.core && !(opt.core instanceof rz.CCore)) {
@@ -127,6 +128,11 @@
 	
 	ViewProvider.prototype.log = function (msg) {rz.log('ViewProvider: ' + msg)};
 	ViewProvider.prototype.error = function (msg) {rz.error('ViewProvider error: ' + msg)};
+	
+	function ESLViewProvider (opt) {
+		ViewProvider.call(this, arguments);
+
+	};
 	
 	rz.scriptLoaded('ViewProvider', ViewProvider);
 })();

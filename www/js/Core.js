@@ -77,7 +77,7 @@
 		};
 		
 		this.version = '0.2a';
-		this._opt.updateInterval = this._opt.updateInterval || 60000; //15sec for test
+		this._opt.updateInterval = this._opt.updateInterval || 15000; //15sec for test
 		this._em = null;
 		this._dataprov = null;
 		this._viewprov = null;
