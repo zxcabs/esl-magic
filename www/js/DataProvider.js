@@ -4,7 +4,9 @@
 	if (!rz || rz.DataProvider) return false;
 	
 	var $ = window.jQuery;
+	var util = rz.util;
 	
+	//Base class
 	function DataProvider (opt) {
 		if (!opt && !opt.core && !(opt.core instanceof rz.CCore)) {
 			this.error('Core undefined');
@@ -13,16 +15,6 @@
 
 		this._opt = opt;
 		this._core = this._opt.core;
-		
-		this._matchInRound = {};
-		
-		if(this['_getData' + this._opt.type] && this['_parseData' + this._opt.type]) {
-			this._getData = this['_getData' + this._opt.type];
-			this._parseData = this['_parseData' + this._opt.type];
-		} else {
-			this.error('Wrong type!');
-		};
-		
 		this._core.on('getData', this._getData.bind(this));
 		this._core.on('endLoad', this._parseData.bind(this));
 		
@@ -37,7 +29,18 @@
 	DataProvider.prototype._getData = function () {this.error('getData(),  doesn\'t select!')};
 	DataProvider.prototype._parseData = function () {this.error('parseData(),  doesn\'t select!')};
 	
-	DataProvider.prototype._getDataESL = function () {
+	DataProvider.prototype.log = function (msg) {rz.log('DataProvider: ' + msg)};
+	DataProvider.prototype.error = function (msg) {rz.error('DataProvider error: ' + msg)};
+	///////Base class
+	
+	//ESL
+	function ESLData (opt) {
+		DataProvider.apply(this, arguments);
+		this._matchInRound = {};
+	};
+	util.inherits(ESLData, DataProvider);
+	
+	ESLData.prototype._getData = function () {
 		this.log('_getDataESL');
 		
 		$.ajax({
@@ -53,7 +56,7 @@
 		}.bind(this));
 	};
 	
-	DataProvider.prototype._parseDataESL = function (data) {
+	ESLData.prototype._parseData = function (data) {
 		this.log('parseDataESL');
 		
 		var $main = $('#main_content', $(data));
@@ -78,7 +81,7 @@
 		};
 	};
 	
-	DataProvider.prototype._parseESLTable = function (name, $tbl, callback) {
+	ESLData.prototype._parseESLTable = function (name, $tbl, callback) {
 		this.log('parse ESL table: ' + name);
 		
 		if ($tbl) {
@@ -139,10 +142,10 @@
 		if (callback) setTimeout(callback, 0);
 		return;
 	};
+	////////////ESL
 	
-	DataProvider.prototype.log = function (msg) {rz.log('DataProvider: ' + msg)};
-	DataProvider.prototype.error = function (msg) {rz.error('DataProvider error: ' + msg)};
-	
-	rz.DataProvider = DataProvider;
-	rz.scriptLoaded('DataProvider', DataProvider);
+	rz.Datas = {
+		ESL: ESLData
+	};
+	rz.scriptLoaded('DataProvider');
 })();

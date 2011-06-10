@@ -81,8 +81,8 @@
 		
 		//TODO: type must bee get on host
 		this._type = 'ESL';
-		this._dataprov = new rz.DataProvider({core: this, type: this._type});;
-		this._viewprov = new rz.Views[this._type];
+		this._dataprov = new rz.Datas[this._type]({core: this});
+		this._viewprov = new rz.Views[this._type]({core: this});
 
 		this.on('endParse', this._proc.bind(this));
 		this.include('http://esl.redzerg.ru/style/'+ this._type.toLowerCase() +'.css');

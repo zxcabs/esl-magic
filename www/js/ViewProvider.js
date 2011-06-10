@@ -6,6 +6,7 @@
 	var $ = window.jQuery;
 	var util = rz.util;
 	
+	//Base Class
 	function ViewProvider(opt) {
 		if (!opt && !opt.core && !(opt.core instanceof rz.CCore)) {
 			this.error('Core undefined');
@@ -14,12 +15,6 @@
 		
 		this._opt = opt || {};
 		this._core = this._opt.core;
-		
-		if(this['_init' + this._opt.type]) this._init = this['_init' + this._opt.type];
-		if(this['_onParseMatch' + this._opt.type]) this._onParseMatch = this['_onParseMatch' + this._opt.type];
-		if(this['_showMatch' + this._opt.type]) this._showMatch = this['_showMatch' + this._opt.type];
-		
-		
 		this._core.on('parseMatch', this._onParseMatch.bind(this));
 		this._core.on('showMatch', this._showMatch.bind(this));
 		this._init();
@@ -34,7 +29,17 @@
 		this.log('ready.');
 	};
 	
-	ViewProvider.prototype._initESL = function () {
+	ViewProvider.prototype.log = function (msg) {rz.log('ViewProvider: ' + msg)};
+	ViewProvider.prototype.error = function (msg) {rz.error('ViewProvider error: ' + msg)};
+	///////// Base class
+	
+	//ESL
+	function ESLView (opt) {
+		ViewProvider.apply(this, arguments);
+	};
+	util.inherits(ESLView, ViewProvider);
+	
+	ESLView.prototype._init = function () {
 		var $t = $('#main_content table');
 		$t.attr('style', '');
 		$t.addClass('rz_table');
@@ -51,7 +56,7 @@
 		this._ready();
 	};
 	
-	ViewProvider.prototype._onParseMatchESL = function (o) {
+	ESLView.prototype._onParseMatch = function (o) {
 		var $t = this._$t[o.tName];
 		
 		if (!this._isInit[o.tName]) {
@@ -117,7 +122,7 @@
 		}
 	};
 	
-	ViewProvider.prototype._showMatchESL = function (e) {
+	ESLView.prototype._showMatch = function (e) {
 		$('.rz_roundC', this._$t[e.tName]).hide();
 		$('.rz_roundC' + e.round, this._$t[e.tName]).show();
 		
@@ -125,17 +130,6 @@
 			$('.rz_match' + e.match, this._$t[e.tName]).addClass('rz_focus').bind('mouseout', function(){$(this).removeClass('rz_focus').unbind('mousemout');}).position();;
 		};
 	};
-	
-	ViewProvider.prototype.log = function (msg) {rz.log('ViewProvider: ' + msg)};
-	ViewProvider.prototype.error = function (msg) {rz.error('ViewProvider error: ' + msg)};
-	
-	
-	//ESL
-	function ESLView (opt) {
-		ViewProvider.apply(this, arguments);
-
-	};
-	util.inherits(ESLView, ViewProvider);
 	/////ESL
 	
 	rz.Views = {
