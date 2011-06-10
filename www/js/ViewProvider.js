@@ -129,10 +129,17 @@
 	ViewProvider.prototype.log = function (msg) {rz.log('ViewProvider: ' + msg)};
 	ViewProvider.prototype.error = function (msg) {rz.error('ViewProvider error: ' + msg)};
 	
-	function ESLViewProvider (opt) {
-		ViewProvider.call(this, arguments);
+	
+	//ESL
+	function ESLView (opt) {
+		ViewProvider.apply(this, arguments);
 
 	};
+	util.inherits(ESLView, ViewProvider);
+	/////ESL
 	
-	rz.scriptLoaded('ViewProvider', ViewProvider);
+	rz.Views = {
+		ESL: ESLView
+	};
+	rz.scriptLoaded('ViewProvider');
 })();

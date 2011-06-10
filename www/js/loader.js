@@ -10,6 +10,7 @@
 	};
 	
 	var container = null;
+	var jQuery = window.jQuery;
 
 	var _scriptLoadEvents = {};
 	function scriptLoaded (name, data) {
@@ -66,8 +67,18 @@
 	};
 	
 	function loader () {
-		include('http://esl.redzerg.ru/js/Core.js', function () {
-			//alert('Go go');
+		if (!jQuery || jQuery && parseInt(jQuery.fn.jquery.replace(/\./g, '')) < 151) {
+			include('http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js');
+		};
+		
+		include('http://esl.redzerg.ru/js/Util.js', function () {
+			include('http://esl.redzerg.ru/js/DataProvider.js', function () {
+				include('http://esl.redzerg.ru/js/ViewProvider.js', function () {
+					include('http://esl.redzerg.ru/js/Core.js', function () {
+						//alert('Go go');
+					});
+				});
+			});
 		});
 	};
 	

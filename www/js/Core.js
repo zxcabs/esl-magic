@@ -6,9 +6,8 @@
 	
 	var host = window.location.host;
 	var path = window.location.pathname;
-	var jQuery = window.jQuery;
-	
-	
+	var util = rz.util;
+
 	//EventMachine
 	function EventMachine (opt) {
 		this._opt = opt || {};
@@ -78,32 +77,16 @@
 		
 		this.version = '0.2a';
 		this._opt.updateInterval = this._opt.updateInterval || 15000; //15sec for test
-		this._em = null;
-		this._dataprov = null;
-		this._viewprov = null;
-		//TODO: type must bee get on host
-		this._type = 'ESL';
-		
 		this._em = new EventMachine();
 		
-		//TODO: uncomment
-		this.on('endParse', this._proc.bind(this));
+		//TODO: type must bee get on host
+		this._type = 'ESL';
+		this._dataprov = new rz.DataProvider({core: this, type: this._type});;
+		this._viewprov = new rz.Views[this._type];
 
-		if (!jQuery || jQuery && parseInt(jQuery.fn.jquery.replace(/\./g, '')) < 151) {
-			this.include('http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js');
-		}
-		
-		this.include('http://esl.redzerg.ru/js/DataProvider.js', function (DataProvider) {
-			this._dataprov = new DataProvider({core: this, type: this._type});
-			if (this._viewprov) this._ready();
-		}.bind(this));
-		
-		this.include('http://esl.redzerg.ru/js/ViewProvider.js', function (ViewProvider) {
-			this._viewprov = new ViewProvider({core: this, type: this._type});
-			if (this._dataprov) this._ready();
-		}.bind(this));
-		
+		this.on('endParse', this._proc.bind(this));
 		this.include('http://esl.redzerg.ru/style/'+ this._type.toLowerCase() +'.css');
+		this._ready();
 	};
 	
 	//private
@@ -147,7 +130,7 @@
 	
 	Core.prototype.log = function (msg) {rz.log('Core: ' + msg)};
 	Core.prototype.error = function (msg) {rz.error('Core error: ' + msg)};
-	Core.prototype.include = function (url, callback) {rz.include(url, callback)};
+	Core.prototype.include = rz.include;
 	
 	//overwrite!!
 	Core.prototype.ready = function (data) {

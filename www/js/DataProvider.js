@@ -142,6 +142,7 @@
 	
 	DataProvider.prototype.log = function (msg) {rz.log('DataProvider: ' + msg)};
 	DataProvider.prototype.error = function (msg) {rz.error('DataProvider error: ' + msg)};
-
+	
+	rz.DataProvider = DataProvider;
 	rz.scriptLoaded('DataProvider', DataProvider);
 })();
