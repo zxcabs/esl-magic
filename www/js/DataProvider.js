@@ -101,8 +101,10 @@
 			var mnum = {};
 			
 			//TODO: async parse
-			for (var i = 2; i < $trs.length; i++) {
-				var $tds = $('td', $trs[i]);
+			util.asyncEach($trs, function ($tr, i) {
+				if (i < 2) return true;
+				
+				var $tds = $('td', $tr);
 				var round = rcount - (parseInt($($tds[$tds.length - 1]).attr('colspan')) / 2)  + 1;
 				var k = rk[round-1] = -rk[round-1];
 				var mid = i + k * Math.pow(2, round - 1);
@@ -134,7 +136,7 @@
 				};
 			
 				this._core.emit('parseMatch', o);
-			}
+			}.bind(this));
 		} else {
 			this.error('table ' + name + ' is null');
 		};

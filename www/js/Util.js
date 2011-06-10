@@ -11,6 +11,25 @@
 		});
 	};
 	
+	util.asyncEach = function (arr, callback) {
+		if (!arr && !arr.slice || typeof callback != 'function') return false;
+		
+		var a = arr.slice(0);
+		var n = 0;
+		
+		function getE () {
+			//no good, but need...
+			var e = a[n];
+			
+			if (e && callback(e, n) != false) {
+				n += 1;
+				setTimeout(getE, 0);
+			};
+		};
+		
+		getE();
+	};
+	
 	rz.util = util;
 	rz.scriptLoaded('Util', util);
 })();
