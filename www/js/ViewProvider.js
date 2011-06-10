@@ -15,6 +15,8 @@
 		
 		this._opt = opt || {};
 		this._core = this._opt.core;
+		this._footer = '<div class="rz_head"></div><div class="rz_body">Идет загрузка...</div>' +
+						'<div class="rz_footer"><a href="http://esl.redzerg.ru">ESL Magic</a> - v: ' + this._core.version + '</div>';
 		this._core.on('parseMatch', this._onParseMatch.bind(this));
 		this._core.on('showMatch', this._showMatch.bind(this));
 		this._init();
@@ -46,8 +48,7 @@
 		var $t = $('#main_content table');
 		$t.attr('style', '');
 		$t.addClass('rz_table');
-		$t.html('<div class="rz_head"></div><div class="rz_body">Идет загрузка...</div>' +
-				'<div class="rz_footer">ESL Magic: <a href="http://esl.redzerg.ru">esl.redzerg.ru</a> - v: ' + this._core.version + '</div>');
+		$t.html(this._footer);
 		
 		this._$t = {
 			t0: $($t[0]),
@@ -70,29 +71,13 @@
 		if (!this._getTableHeader(o)) {
 			this._setTableHeader(o);
 		};
-		
-		
-		var $m = this._getMatchC(o);
-	
-		
-		var $p = $('.rz_player' + o.playerId + ' .rz_playerHTML', $m);
-		if ($p.length == 0) {
-			$p = $('<div class="rz_player rz_player'+ o.playerId +'"></div>').appendTo($m);
-			
-			var $prev = $('<div class="rz_prev">' + ((o.round != 1)?'&lArr;': '&nbsp;' )+'</div>').appendTo($p);
-			
-			$prev.bind('click', {tName: o.tName, round: o.round - 1, match: o.playerId, vp: this}, function (e) {
-				e.data.vp._core.emit('showMatch', e.data);
-			});
-			
-			$p = $('<div class="rz_playerHTML"></div>').appendTo($p);
-		}
-		
+
+		var $p = this._getPlayerC(o);
 		if (o.playerWinner) $p.addClass('TextMB');
 		$p.html(o.playerHTML);
 		
 		if (o.vHTML) {
-			$('.rz_match'+ o.vId +' .rz_vs', $t).html(o.vHTML);
+			$('.rz_vs', this._getMatchC({tName: o.tName, matchId: o.vId, round: o.round - 1})).html(o.vHTML);
 		}
 	};
 	
@@ -148,6 +133,27 @@
 		};
 		
 		return $r;
+	};
+	
+	ESLView.prototype._getPlayerC = function (o) {
+		var $t = this._$t[o.tName];
+		var $p = null;
+		var $m = this._getMatchC(o);
+		
+		$p = $('.rz_player' + o.playerId + ' .rz_playerHTML', $m);
+		if ($p.length == 0) {
+			$p = $('<div class="rz_player rz_player'+ o.playerId +'"></div>').appendTo($m);
+			
+			var $prev = $('<div class="rz_prev">' + ((o.round != 1)?'&lArr;': '&nbsp;' )+'</div>').appendTo($p);
+			
+			$prev.bind('click', {tName: o.tName, round: o.round - 1, match: o.playerId, vp: this}, function (e) {
+				e.data.vp._core.emit('showMatch', e.data);
+			});
+			
+			$p = $('<div class="rz_playerHTML"></div>').appendTo($p);
+		}
+		
+		return $p;
 	};
 	
 	ESLView.prototype._getMatchC = function (o) {
