@@ -36,6 +36,9 @@
 	//ESL
 	function ESLView (opt) {
 		ViewProvider.apply(this, arguments);
+		
+		this._$dom = {};
+		this._cureRound = {};
 	};
 	util.inherits(ESLView, ViewProvider);
 	
@@ -63,28 +66,12 @@
 			$('.rz_body', $t).html('');
 			this._isInit[o.tName] = true;
 		};
-		
-		var $r = $('.rz_body .rz_roundC' + o.round + ' .rz_matchC', $t);
-		if ($('.rz_head .rz_round' + o.round, $t).length == 0) {
-			var str = (o.round == o.totalRound)? 'Победитель': 
-						(o.round == o.totalRound - 1)? 'Финал': 
-							(o.round == o.totalRound - 2)? '1/2 финала':
-								(o.round == o.totalRound - 3)? '1/4 финала': 'Раунд ' + o.round;
-								
-			if ($r.length == 0) {
-				$r = $('<div class="rz_roundC rz_roundC'+ o.round +'"></div>').appendTo($('.rz_body', $t));
-				if (o.round != 1) $r.hide();
-				
-				$('<div><h2>' + str + '</h2></div>').appendTo($r);
-				$r = $('<div class="rz_matchC"></div>').appendTo($r);
-			};					
-			
-			var $th = $('<span class="rz_round rz_round' + o.round + '">' + str + '</span>').appendTo($('.rz_head', $t));
-			$th.bind('click', {tName: o.tName, round: o.round, vp: this}, function (e) {
-				e.data.vp._core.emit('showMatch', e.data);
-			});
+		//TODO !!!!!!!!!!!!!!!!!!!!!!!!!!
+		if (!this._getTableHeader(o)) {
+			this._setTableHeader(0);
 		};
 		
+		var $r = this._getRoundC(o);
 		var $m = $('.rz_match' + o.matchId, $r);
 		if ($m.length == 0) {
 			$m = $('<span class="rz_match rz_match'+ o.matchId +'"></span>').appendTo($r);
@@ -122,6 +109,55 @@
 		}
 	};
 	
+	ESLView.prototype._getTableHeader = function (o) {
+		var $th = null;
+		
+		if (this._$dom[o.tName] && this._$dom[o.tName]['round' + o.round]) {
+			$th = this._$dom[o.tName]['round' + o.round]['head'];
+		};
+		
+		return $th;
+	};
+	
+	ESLView.prototype._setTableHeader = function (o) {
+		var $t = this._$t[o.tName];
+		this._$dom[o.tName] = {};
+		this._$dom[o.tName]['round' + o.round] = {};
+		var str = (o.round == o.totalRound)? 'Победитель': 
+					(o.round == o.totalRound - 1)? 'Финал': 
+						(o.round == o.totalRound - 2)? '1/2 финала':
+							(o.round == o.totalRound - 3)? '1/4 финала': 'Раунд ' + o.round;
+
+		var $th = $('<span class="rz_round rz_round' + o.round + '">' + str + '</span>').appendTo($('.rz_head', $t));
+		$th.bind('click', {tName: o.tName, round: o.round, vp: this}, function (e) {
+			e.data.vp._core.emit('showMatch', e.data);
+		});
+		
+		this._$dom[o.tName]['round' + o.round]['head'] = $th;
+	};
+	
+	ESLView.prototype._getRoundC = function (o) {
+		var $t = this._$t[o.tName];
+		var $r = nuul;
+		
+		if (this._$dom[o.tName] && this._$dom[o.tName]['round' + o.round] && 
+			this._$dom[o.tName]['round' + o.round]['round']) {
+			$r = this._$dom[o.tName]['round' + o.round]['round'];
+		} else {
+			$r = $('<div class="rz_roundC rz_roundC'+ o.round +'"></div>').appendTo($('.rz_body', $t));
+			if (o.round != 1) $r.hide();
+			$('<div><h2>' + str + '</h2></div>').appendTo($r);
+			$r = $('<div class="rz_matchC"></div>').appendTo($r);
+			
+			this._$dom[o.tName] = this._$dom[o.tName] || {};
+			this._$dom[o.tName]['round' + o.round] = this._$dom[o.tName]['round' + o.round] || {};
+			this._$dom[o.tName]['round' + o.round]['round'] = $r;
+			
+		};
+		
+		return $r;
+	};
+
 	ESLView.prototype._showMatch = function (e) {
 		$('.rz_roundC', this._$t[e.tName]).hide();
 		$('.rz_roundC' + e.round, this._$t[e.tName]).show();
