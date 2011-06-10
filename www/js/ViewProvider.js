@@ -68,27 +68,14 @@
 		};
 		//TODO !!!!!!!!!!!!!!!!!!!!!!!!!!
 		if (!this._getTableHeader(o)) {
-			this._setTableHeader(0);
+			this._setTableHeader(o);
 		};
 		
-		var $r = this._getRoundC(o);
-		var $m = $('.rz_match' + o.matchId, $r);
-		if ($m.length == 0) {
-			$m = $('<span class="rz_match rz_match'+ o.matchId +'"></span>').appendTo($r);
-			
-			$('<div class="rz_vs"></div>').appendTo($m)
-			if (o.round != o.totalRound) {
-				var $next = $('<div class="rz_next">&rArr;</div>').appendTo($m);
-			
-				$next.bind('click', {tName: o.tName, round: o.round + 1, match: o.matchNext, vp: this}, function (e) {
-					e.data.vp._core.emit('showMatch', e.data);
-				});
-			}
-			
-		}
 		
+		var $m = this._getMatchC(o);
+	
 		
-		var $p = $('.rz_player' + o.playerId + ' .rz_playerHTML', $r);
+		var $p = $('.rz_player' + o.playerId + ' .rz_playerHTML', $m);
 		if ($p.length == 0) {
 			$p = $('<div class="rz_player rz_player'+ o.playerId +'"></div>').appendTo($m);
 			
@@ -121,7 +108,7 @@
 	
 	ESLView.prototype._setTableHeader = function (o) {
 		var $t = this._$t[o.tName];
-		this._$dom[o.tName] = {};
+		this._$dom[o.tName] = this._$dom[o.tName] || {};
 		this._$dom[o.tName]['round' + o.round] = {};
 		var str = (o.round == o.totalRound)? 'Победитель': 
 					(o.round == o.totalRound - 1)? 'Финал': 
@@ -138,12 +125,17 @@
 	
 	ESLView.prototype._getRoundC = function (o) {
 		var $t = this._$t[o.tName];
-		var $r = nuul;
+		var $r = null;
 		
 		if (this._$dom[o.tName] && this._$dom[o.tName]['round' + o.round] && 
-			this._$dom[o.tName]['round' + o.round]['round']) {
-			$r = this._$dom[o.tName]['round' + o.round]['round'];
+			this._$dom[o.tName]['round' + o.round]['roundC']) {
+			$r = this._$dom[o.tName]['round' + o.round]['roundC'];
 		} else {
+			var str = (o.round == o.totalRound)? 'Победитель': 
+				(o.round == o.totalRound - 1)? 'Финал': 
+					(o.round == o.totalRound - 2)? '1/2 финала':
+						(o.round == o.totalRound - 3)? '1/4 финала': 'Раунд ' + o.round;
+			
 			$r = $('<div class="rz_roundC rz_roundC'+ o.round +'"></div>').appendTo($('.rz_body', $t));
 			if (o.round != 1) $r.hide();
 			$('<div><h2>' + str + '</h2></div>').appendTo($r);
@@ -151,11 +143,44 @@
 			
 			this._$dom[o.tName] = this._$dom[o.tName] || {};
 			this._$dom[o.tName]['round' + o.round] = this._$dom[o.tName]['round' + o.round] || {};
-			this._$dom[o.tName]['round' + o.round]['round'] = $r;
+			this._$dom[o.tName]['round' + o.round]['roundC'] = $r;
 			
 		};
 		
 		return $r;
+	};
+	
+	ESLView.prototype._getMatchC = function (o) {
+		var $t = this._$t[o.tName];
+		var $m = null;
+		var $r = null;
+		var $next = null;
+		
+		if (this._$dom[o.tName] && this._$dom[o.tName]['round' + o.round] && 
+			this._$dom[o.tName]['round' + o.round]['matchC']) {
+			$m = this._$dom[o.tName]['round' + o.round]['matchC']['m' + o.matchId];
+		};
+		
+		if (!$m) {
+			$r = this._getRoundC(o);
+			$m = $('<span class="rz_match rz_match'+ o.matchId +'"></span>');
+			
+			$('<div class="rz_vs"></div>').appendTo($m)
+			if (o.round != o.totalRound) {
+				$next = $('<div class="rz_next">&rArr;</div>').appendTo($m);
+			
+				$next.bind('click', {tName: o.tName, round: o.round + 1, match: o.matchNext, vp: this}, function (e) {
+					e.data.vp._core.emit('showMatch', e.data);
+				});
+			}
+			$m.appendTo($r);
+			
+			this._$dom[o.tName]['round' + o.round] = this._$dom[o.tName]['round' + o.round] || {};
+			this._$dom[o.tName]['round' + o.round]['matchC'] = this._$dom[o.tName]['round' + o.round]['matchC'] || {};
+			this._$dom[o.tName]['round' + o.round]['matchC']['m' + o.matchId] = $m;
+		};
+		
+		return $m;
 	};
 
 	ESLView.prototype._showMatch = function (e) {
