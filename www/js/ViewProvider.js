@@ -130,6 +130,18 @@
 		mc[match.id] = {$: $m};
 	};
 
+	ESLView.prototype._onUpdateMatch = function (player) {
+		var $m, $p;
+		$m = this._$dom[player.match.tName][player.match.round].mc[player.match.id].$;
+		$p = $('.rz_player' + player.id + ' > .rz_playerHTML', $m);
+		
+		$m.addClass('rz_update').bind('mouseout', function () {
+			$(this).removeClass('rz_update').unbind('mouseout');
+		});
+		
+		$p.html(player.html);
+	};
+	
 	ESLView.prototype._showMatch = function (e) {
 		var mc;
 		
@@ -140,7 +152,7 @@
 			mc = this._$dom[e.tName][e.round]['mc'];
 			if (mc[e.match]) {
 				mc[e.match].$.addClass('rz_focus').bind('mouseout', function(){
-					$(this).removeClass('rz_focus').unbind('mousemout');
+					$(this).removeClass('rz_focus').unbind('mouseout');
 				}).position();
 			};
 		};
