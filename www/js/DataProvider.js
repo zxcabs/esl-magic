@@ -200,7 +200,7 @@
 		} else if (pl.html !== player.html || pl.winner != player.winner) {
 			pl.html = player.html;
 			pl.winner = player.winner;
-			this._core.emit('updatePlayer', pl);
+			this._core.emit('updateMatch', pl);
 		};
 		
 		//new match ready

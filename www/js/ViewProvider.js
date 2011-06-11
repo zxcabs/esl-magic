@@ -21,14 +21,20 @@
 		//this._core.on('parseMatch', this._onParseMatch.bind(this));
 		this._core.on('showMatch', this._showMatch.bind(this));
 		this._core.on('initTable', this._onInitTable.bind(this));
+		this._core.on('newMatch', this._onNewMatch.bind(this));
+		this._core.on('updateMatch', this._onUpdateMatch.bind(this));
+		this._core.on('addMatchLink', this._onAddMatchLink.bind(this));
 		
 		this._init();
 	};
 	
 	ViewProvider.prototype._init = function () {this.error('init(): doesn`t overwritten!')};
-	ViewProvider.prototype._onParseMatch = function () {this.error('onParseMatch doesn`t overwritten!')};
+	//ViewProvider.prototype._onParseMatch = function () {this.error('onParseMatch doesn`t overwritten!')};
 	ViewProvider.prototype._showMatch = function () {this.error('showMatch doesn`t overwritten!')};
 	ViewProvider.prototype._onInitTable = function () {this.error('onInitTable doesn`t overwritten!')};
+	ViewProvider.prototype._onNewMatch = function () {this.error('onNewMatch doesn`t overwritten!')};
+	ViewProvider.prototype._onUpdateMatch = function () {this.error('onUpdateMatch doesn`t overwritten!')};
+	ViewProvider.prototype._onAddMatchLink = function () {this.error('onAddMatchLink doesn`t overwritten!')};
 	
 	ViewProvider.prototype._ready = function () {
 		this._core.emit('viewprovReady');
@@ -93,6 +99,10 @@
 										mc: { $: $mc }
 									};
 		};
+	};
+	
+	ESLView.prototype._onNewMatch = function (match) {
+		
 	};
 	
 	ESLView.prototype._onParseMatch = function (o) {
