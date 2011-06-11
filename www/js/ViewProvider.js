@@ -16,7 +16,10 @@
 		this._opt = opt || {};
 		this._core = this._opt.core;
 		this._footer = '<div class="rz_head"></div><div class="rz_body">Идет загрузка...</div>' +
-						'<div class="rz_footer"><a href="http://esl.redzerg.ru">ESL Magic</a> - v: ' + this._core.version + '</div>';
+						'<div class="rz_footer">' + 
+							'<div>Сетка автоматически обновляется каждые: ' + this._core._opt.updateInterval / 1000 + ' сек.</div>' +
+							'<div><a href="http://esl.redzerg.ru">ESL Magic</a> - v: ' + this._core.version + '</div>' +
+						'</div>';
 		
 		this._core.on('showMatch', this._showMatch.bind(this));
 		this._core.on('initTable', this._onInitTable.bind(this));
