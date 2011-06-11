@@ -30,8 +30,8 @@
 		this.log('ready.');
 	};
 	
-	DataProvider.prototype._getData = function () {this.error('getData(),  doesn\'t select!')};
-	DataProvider.prototype._parseData = function () {this.error('parseData(),  doesn\'t select!')};
+	DataProvider.prototype._getData = function () {this.error('getData(),  doesn\'t overwritten!')};
+	DataProvider.prototype._parseData = function () {this.error('parseData(),  doesn\'t overwritten!')};
 	DataProvider.prototype._onParseMatch = function (match) {
 		var tm = this._data[match.tName] = this._data[match.tName] || {};
 		var m = tm[match.matchId] = tm[match.matchId] || new Match({

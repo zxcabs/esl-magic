@@ -17,14 +17,18 @@
 		this._core = this._opt.core;
 		this._footer = '<div class="rz_head"></div><div class="rz_body">Идет загрузка...</div>' +
 						'<div class="rz_footer"><a href="http://esl.redzerg.ru">ESL Magic</a> - v: ' + this._core.version + '</div>';
-		this._core.on('parseMatch', this._onParseMatch.bind(this));
+		
+		//this._core.on('parseMatch', this._onParseMatch.bind(this));
 		this._core.on('showMatch', this._showMatch.bind(this));
+		this._core.on('initTable', this._onInitTable.bind(this));
+		
 		this._init();
 	};
 	
-	ViewProvider.prototype._init = function () {this.error('init(): doesn`t selected!')};
-	ViewProvider.prototype._onParseMatch = function () {this.error('onParseMatch doesn`t selected!')};
-	ViewProvider.prototype._showMatch = function () {this.error('showMatch doesn`t selected!')};
+	ViewProvider.prototype._init = function () {this.error('init(): doesn`t overwritten!')};
+	ViewProvider.prototype._onParseMatch = function () {this.error('onParseMatch doesn`t overwritten!')};
+	ViewProvider.prototype._showMatch = function () {this.error('showMatch doesn`t overwritten!')};
+	ViewProvider.prototype._onInitTable = function () {this.error('onInitTable doesn`t overwritten!')};
 	
 	ViewProvider.prototype._ready = function () {
 		this._core.emit('viewprovReady');
@@ -40,7 +44,6 @@
 		ViewProvider.apply(this, arguments);
 		
 		this._$dom = {};
-		this._cureRound = {};
 	};
 	util.inherits(ESLView, ViewProvider);
 	
@@ -58,6 +61,38 @@
 		this._isInit = {t0: false, t1: false};
 		
 		this._ready();
+	};
+	
+	ESLView.prototype._onInitTable = function (o) {
+		var $t = this._$t[o.name];
+		var str, r, $th, $r, $mc;
+		
+		this._$dom[o.name] = {};
+		
+		$('.rz_body', $t).html('');
+		
+		for (r = 1; r <= o.roundCount; r++) {
+			str = (r == o.roundCount)? 'Победитель': 
+					(r == o.roundCount - 1)? 'Финал': 
+						(r == o.roundCount - 2)? '1/2 финала':
+							(r == o.roundCount - 3)? '1/4 финала': 'Раунд ' + r;
+			
+			$th = $('<span class="rz_round rz_round' + o.round + '">' + str + '</span>').appendTo($('.rz_head', $t));
+			
+			$th.bind('click', {tName: o.name, round: r, vp: this}, function (e) {
+				e.data.vp._core.emit('showMatch', e.data);
+			});
+			
+			$r = $('<div class="rz_roundC rz_roundC'+ r +'"></div>').appendTo($('.rz_body', $t));
+			if (r != 1) $r.hide();
+			$('<div><h2>' + str + '</h2></div>').appendTo($r);
+			$mc = $('<div class="rz_matchC"></div>').appendTo($r);
+			
+			this._$dom[o.name][r] = {
+										$: $r, 
+										mc: { $: $mc }
+									};
+		};
 	};
 	
 	ESLView.prototype._onParseMatch = function (o) {
@@ -190,11 +225,18 @@
 	};
 
 	ESLView.prototype._showMatch = function (e) {
+		var mc;
+		
 		$('.rz_roundC', this._$t[e.tName]).hide();
-		$('.rz_roundC' + e.round, this._$t[e.tName]).show();
+		this._$dom[e.tName][e.round].$.show();
 		
 		if (e.match) {
-			$('.rz_match' + e.match, this._$t[e.tName]).addClass('rz_focus').bind('mouseout', function(){$(this).removeClass('rz_focus').unbind('mousemout');}).position();;
+			mc = this._$dom[e.tName]['r' + e.round]['mc'];
+			if (mc[e.match]) {
+				mc[e.match].$.addClass('rz_focus').bind('mouseout', function(){
+					$(this).removeClass('rz_focus').unbind('mousemout');
+				}).position();
+			};
 		};
 	};
 	/////ESL
