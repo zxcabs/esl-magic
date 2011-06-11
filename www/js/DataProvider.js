@@ -32,6 +32,7 @@
 	DataProvider.prototype._getData = function () {this.error('getData(),  doesn\'t select!')};
 	DataProvider.prototype._parseData = function () {this.error('parseData(),  doesn\'t select!')};
 	DataProvider.prototype._onParseMatch = function (match) {
+		this.log('_onParseMatch');
 	};
 	
 	DataProvider.prototype.log = function (msg) {rz.log('DataProvider: ' + msg)};

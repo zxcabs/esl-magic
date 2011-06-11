@@ -44,7 +44,7 @@
 					var subarr = this._sub[e.n];
 					
 					for (var i in subarr) {
-						if (subarr[i] && !subarr[i](e.d)) break;
+						if (subarr[i](e.d) == false) break;
 					}
 				};
 				
