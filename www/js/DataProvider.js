@@ -215,7 +215,6 @@
 	Match.prototype.setLink = function (html) {
 		if (!this.link) {
 			this.link = html;
-			this._core.emit('addMatchLink', this);
 		};
 	};	
 	
