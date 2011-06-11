@@ -32,7 +32,21 @@
 	DataProvider.prototype._getData = function () {this.error('getData(),  doesn\'t select!')};
 	DataProvider.prototype._parseData = function () {this.error('parseData(),  doesn\'t select!')};
 	DataProvider.prototype._onParseMatch = function (match) {
-		this.log('_onParseMatch');
+		var tm = this._data[match.tName] = this._data[match.tName] || {};
+		var m = tm[match.matchId] = tm[match.matchId] || new Match({
+													core : this._core,
+													id   : match.matchId,
+													tName: match.tName,
+													round: match.round,
+													next : match.next
+												});
+		
+		m.setPlayer({id: match.playerId, html: match.playerHTML, winner: match.playerWinner});
+		
+		if (match.vId) {
+			m = tm[match.vId];
+			m.setLink(match.vHTML);
+		};
 	};
 	
 	DataProvider.prototype.log = function (msg) {rz.log('DataProvider: ' + msg)};
@@ -137,7 +151,7 @@
 				
 				if (v != null) {
 					o['vId'] = i;
-					o['vHTML'] = $('a', $tds[v]);
+					o['vHTML'] = $('a', $tds[v]).html();
 				};
 			
 				this._core.emit('parseMatch', o);
