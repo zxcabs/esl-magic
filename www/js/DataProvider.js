@@ -35,11 +35,12 @@
 	DataProvider.prototype._onParseMatch = function (match) {
 		var tm = this._data[match.tName] = this._data[match.tName] || {};
 		var m = tm[match.matchId] = tm[match.matchId] || new Match({
-													core : this._core,
-													id   : match.matchId,
-													tName: match.tName,
-													round: match.round,
-													next : match.next
+													core  : this._core,
+													id    : match.matchId,
+													tName : match.tName,
+													round : match.round,
+													next  : match.matchNext,
+													isLast: (match.round == match.totalRound)
 												});
 		
 		m.setPlayer({id: match.playerId, html: match.playerHTML, winner: match.playerWinner});
@@ -156,7 +157,7 @@
 				
 				if (v != null) {
 					o['vId'] = i;
-					o['vHTML'] = $('a', $tds[v]).html();
+					o['vHTML'] = $('a', $tds[v]).parent().html();
 				};
 			
 				this._core.emit('parseMatch', o);
@@ -182,20 +183,21 @@
 		this.tName = opt.tName;
 		this.round = opt.round;
 		this.next = opt.next;
+		this.isLast = opt.isLast;
 		
 		this.link = null;
 		
-		this._plrs = {};
+		this.plrs = {};
 		
 		this._setCount = 0;
 	};
 	
 	Match.prototype.setPlayer = function (player) {
-		var pl = this._plrs[player.id];
+		var pl = this.plrs[player.id];
 		
 		if (!pl) {
 			pl = {id: player.id, html: player.html, winner: player.winner, match: this};
-			this._plrs[player.id] = pl;
+			this.plrs[player.id] = pl;
 			this._setCount++;
 		} else if (pl.html !== player.html || pl.winner != player.winner) {
 			pl.html = player.html;
@@ -204,7 +206,7 @@
 		};
 		
 		//new match ready
-		if (this._setCount == 2) {
+		if (this._setCount == 2 || this.isLast && this._setCount != -1) {
 			this._setCount = -1;
 			this._core.emit('newMatch', this);
 		};

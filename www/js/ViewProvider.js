@@ -102,7 +102,36 @@
 	};
 	
 	ESLView.prototype._onNewMatch = function (match) {
+		var $m, $r, mc, $next, $p, $prev;
 		
+		$r = this._$dom[match.tName][match.round].$;
+		mc = this._$dom[match.tName][match.round].mc;
+		
+		$m = $('<span class="rz_match rz_match'+ match.id +'"></span>');		
+		$('<div class="rz_vs">' + ((match.isLast)? '': match.link) + '</div>').appendTo($m);
+		
+		if (!match.isLast) {
+			$next = $('<div class="rz_next">&rArr;</div>').appendTo($m);
+			$next.bind('click', {tName: match.tName, round: match.round + 1, match: match.next, vp: this}, function (e) {
+				e.data.vp._core.emit('showMatch', e.data);
+			});
+		};
+		
+		for (var p in match.plrs) {
+			$p = $('<div class="rz_player rz_player'+ p +'"></div>');
+			$prev = $('<div class="rz_prev">' + ((match.round != 1)?'&lArr;': '&nbsp;' )+'</div>').appendTo($p);			
+			
+			$prev.bind('click', {tName: match.tName, round: match.round - 1, match: p, vp: this}, function (e) {
+				e.data.vp._core.emit('showMatch', e.data);
+			});
+			
+			$('<div class="rz_playerHTML">' + match.plrs[p].html + '</div>').appendTo($p);
+			$p.appendTo($m);
+		}
+		
+		$m.appendTo($r);
+		
+		mc[match.id] = {$: $m};
 	};
 	
 	ESLView.prototype._onParseMatch = function (o) {
@@ -240,8 +269,8 @@
 		$('.rz_roundC', this._$t[e.tName]).hide();
 		this._$dom[e.tName][e.round].$.show();
 		
-		if (e.match) {
-			mc = this._$dom[e.tName]['r' + e.round]['mc'];
+		if (typeof e.match != 'undefined') {
+			mc = this._$dom[e.tName][e.round]['mc'];
 			if (mc[e.match]) {
 				mc[e.match].$.addClass('rz_focus').bind('mouseout', function(){
 					$(this).removeClass('rz_focus').unbind('mousemout');

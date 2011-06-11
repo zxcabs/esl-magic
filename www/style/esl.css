@@ -28,7 +28,8 @@
 }
 	
 .rz_match {
-	width:144px; 
+	width:144px;
+	height: 32px;
 	display:inline-block; 
 	margin:2px; 
 	border:1px solid black; 
