@@ -17,7 +17,7 @@
 		rzContainer.prepend(rzHead);
 		
 		var $note = $('<div class="rz_note">Вышла новая версия ESL Magic. Посетите <a href="http://esl.redzerg.ru/">esl.redzerg.ru</a> для обновления.</a>'
-						+ '<br>Подробности обновления читать на: <a href="http://vodportal.ru/zxcabs/2011/06/05/volshebnaya-knopka-esl-v02a.html">vodportal.ru</a></div>');
+						+ '<br>Подробности обновления читать на: <a href="http://vodportal.ru/tag/ESL%20Magic/">vodportal.ru</a></div>');
 		$note.insertBefore(rzContainer);
 		
 		for(var t in head) {
