@@ -20,6 +20,7 @@
 		this._core.on('parseMatch', this._onParseMatch.bind(this));
 		
 		this._data = {};
+		this._isInit = {};
 		
 		this._ready();
 	};
@@ -56,7 +57,6 @@
 	//ESL
 	function ESLData (opt) {
 		DataProvider.apply(this, arguments);
-		this._matchInRound = {};
 	};
 	util.inherits(ESLData, DataProvider);
 	
@@ -108,6 +108,11 @@
 			
 			var $trs = $('tr', $tbl);
 			var rcount = $('td.TextS', $trs[0]).length;
+			
+			if (!this._isInit[name]) {
+				this._core.emit('initTable', {name: name, roundCount: rcount});
+				this._isInit[name] = true;
+			};
 			
 			//round cof, need to calculate math number in round
 			var rk = new Array();
