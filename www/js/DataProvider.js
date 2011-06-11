@@ -17,6 +17,9 @@
 		this._core = this._opt.core;
 		this._core.on('getData', this._getData.bind(this));
 		this._core.on('endLoad', this._parseData.bind(this));
+		this._core.on('parseMatch', this._onParseMatch.bind(this));
+		
+		this._data = {};
 		
 		this._ready();
 	};
@@ -28,6 +31,8 @@
 	
 	DataProvider.prototype._getData = function () {this.error('getData(),  doesn\'t select!')};
 	DataProvider.prototype._parseData = function () {this.error('parseData(),  doesn\'t select!')};
+	DataProvider.prototype._onParseMatch = function (match) {
+	};
 	
 	DataProvider.prototype.log = function (msg) {rz.log('DataProvider: ' + msg)};
 	DataProvider.prototype.error = function (msg) {rz.error('DataProvider error: ' + msg)};
@@ -100,7 +105,6 @@
 			var mrnum = {};
 			var mnum = {};
 			
-			//TODO: async parse
 			util.asyncEach($trs, function ($tr, i) {
 				if (i < 2) return true;
 				
@@ -146,6 +150,56 @@
 	};
 	////////////ESL
 	
+	//Match
+	function Match (opt) {
+		if (!opt && !opt.core && !(opt.core instanceof rz.CCore)) {
+			this.error('Core undefined');
+			return false;
+		};
+		
+		this._core = opt.core;
+		this.id = opt.id;
+		this.tName = opt.tName;
+		this.round = opt.round;
+		this.next = opt.next;
+		
+		this.link = null;
+		
+		this._plrs = {};
+		
+		this._setCount = 0;
+	};
+	
+	Match.prototype.setPlayer = function (player) {
+		var pl = this._plrs[player.id];
+		
+		if (!pl) {
+			pl = {id: player.id, html: player.html, winner: player.winner, match: this};
+			this._plrs[player.id] = pl;
+			this._setCount++;
+		} else if (pl.html !== player.html || pl.winner != player.winner) {
+			pl.html = player.html;
+			pl.winner = player.winner;
+			this._core.emit('updatePlayer', pl);
+		};
+		
+		//new match ready
+		if (this._setCount == 2) {
+			this._setCount = -1;
+			this._core.emit('newMatch', this);
+		};
+	};
+	
+	Match.prototype.setLink = function (html) {
+		if (!this.link) {
+			this.link = html;
+			this._core.emit('addMatchLink', this);
+		};
+	};	
+	
+	Match.prototype.log = function (msg) {rz.log('Match (' + this._id + '): ' + msg)};
+	Match.prototype.error = function (msg) {rz.error('Match (' + this._id + ') error: ' + msg)};
+	/////////////Match
 	rz.Datas = {
 		ESL: ESLData
 	};
