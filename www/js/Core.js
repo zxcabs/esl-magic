@@ -80,7 +80,7 @@
 		};
 		
 		this.version = '0.4a';
-		this._opt.updateInterval = this._opt.updateInterval || 30 * 1000; //15sec for test
+		this._opt.updateInterval = this._opt.updateInterval || 60 * 1000; //15sec for test
 		this._em = new EventMachine();
 		
 		//TODO: type must bee get on host
