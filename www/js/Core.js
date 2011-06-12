@@ -18,9 +18,15 @@
 	};
 	
 	//Emit event 
-	EventMachine.prototype.emit = function (name, data) {
+	EventMachine.prototype.emit = function (name, data, first) {
 		if (name && typeof(name) == 'string') {
-			this._pub.push({n: name, d: data});
+			var e = {n: name, d: data};
+			
+			if (first) {
+				this._pub.unshift(e);
+			} else {
+				this._pub.push(e);
+			}
 		};
 	};
 	
@@ -32,12 +38,12 @@
 		};
 	};
 	
-	EventMachine.prototype._tick = function (callback) {
-		var arr = this._pub;
-		this._pub = new Array();
+	EventMachine.prototype._tick = function () {
+		//var arr = this._pub;
+		//this._pub = new Array();
 		
-		var tack = function (callback) {
-			var e = arr.shift();
+		var tack = function () {
+			var e = this._pub.shift();
 			
 			if (e) {
 				if (this._sub[e.n]) {
@@ -49,20 +55,18 @@
 				};
 				
 				delete (e);
-				setTimeout(function() {tack.call(this, callback)}.bind(this), 0);
+				setTimeout(tack.bind(this), 0);
 			} else {
-				delete (arr);
-				return (callback)? callback.call(this): null;
+				//delete (arr);
+				this._proc();
 			};
 		};
 		
-		tack.call(this, callback);
+		tack.call(this);
 	};
 	
 	EventMachine.prototype._proc = function () {
-		setTimeout(function() {
-			this._tick(this._proc);
-		}.bind(this), 0);
+		setTimeout(this._tick.bind(this), 0);
 	};
 	///////////EventMachine
 	
@@ -76,7 +80,7 @@
 		};
 		
 		this.version = '0.4a';
-		this._opt.updateInterval = this._opt.updateInterval || 60 * 1000; //15sec for test
+		this._opt.updateInterval = this._opt.updateInterval || 30 * 1000; //15sec for test
 		this._em = new EventMachine();
 		
 		//TODO: type must bee get on host

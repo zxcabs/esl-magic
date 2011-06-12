@@ -84,9 +84,7 @@
 			
 			$th = $('<span class="rz_round rz_round' + o.round + '">' + str + '</span>').appendTo($('.rz_head', $t));
 			
-			$th.bind('click', {tName: o.name, round: r, vp: this}, function (e) {
-				e.data.vp._core.emit('showMatch', e.data);
-			});
+			$th.bind('click', {tName: o.name, round: r, vp: this}, this._onHeadClick);
 			
 			$r = $('<div class="rz_roundC rz_roundC'+ r +'"></div>').appendTo($('.rz_body', $t));
 			if (r != 1) $r.hide();
@@ -111,18 +109,14 @@
 		
 		if (!match.isLast) {
 			$next = $('<div class="rz_next">&rArr;</div>').appendTo($m);
-			$next.bind('click', {tName: match.tName, round: match.round + 1, match: match.next, vp: this}, function (e) {
-				e.data.vp._core.emit('showMatch', e.data);
-			});
+			$next.bind('click', {tName: match.tName, round: match.round + 1, match: match.next, vp: this}, this._onNextClick);
 		};
 		
 		for (var p in match.plrs) {
-			$p = $('<div class="rz_player rz_player'+ p +'"></div>');
-			$prev = $('<div class="rz_prev">' + ((match.round != 1)?'&lArr;': '&nbsp;' )+'</div>').appendTo($p);			
+			$p = $('<div class="rz_player rz_player'+ p + ((match.plrs[p].winner)? ' TextMB': '') +'"></div>');
 			
-			$prev.bind('click', {tName: match.tName, round: match.round - 1, match: p, vp: this}, function (e) {
-				e.data.vp._core.emit('showMatch', e.data);
-			});
+			$prev = $('<div class="rz_prev">' + ((match.round != 1)?'&lArr;': '&nbsp;' )+'</div>').appendTo($p);			
+			$prev.bind('click', {tName: match.tName, round: match.round - 1, match: p, vp: this}, this._onPrevClick);
 			
 			$('<div class="rz_playerHTML">' + match.plrs[p].html + '</div>').appendTo($p);
 			$p.appendTo($m);
@@ -136,13 +130,29 @@
 	ESLView.prototype._onUpdateMatch = function (player) {
 		var $m, $p;
 		$m = this._$dom[player.match.tName][player.match.round].mc[player.match.id].$;
-		$p = $('.rz_player' + player.id + ' > .rz_playerHTML', $m);
+		$p = $('.rz_player' + player.id, $m);
 		
-		$m.addClass('rz_update').bind('mouseout', function () {
-			$(this).removeClass('rz_update').unbind('mouseout');
-		});
+		if (player.winner) $p.addClass('TextMB');
+		$p = $('.rz_playerHTML', $p);
+		
+		//yellow box
+		//$m.addClass('rz_update').bind('mouseout', function () {
+		//	$(this).removeClass('rz_update').unbind('mouseout');
+		//});
 		
 		$p.html(player.html);
+	};
+	
+	ESLView.prototype._onHeadClick = function (e) {
+		e.data.vp._core.emit('showMatch', e.data, true);
+	};
+	
+	ESLView.prototype._onNextClick = function (e) {
+		e.data.vp._core.emit('showMatch', e.data, true);
+	};
+	
+	ESLView.prototype._onPrevClick = function (e) {
+		e.data.vp._core.emit('showMatch', e.data, true);
 	};
 	
 	ESLView.prototype._showMatch = function (e) {

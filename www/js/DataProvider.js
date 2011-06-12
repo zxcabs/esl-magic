@@ -88,9 +88,12 @@
 				t1 = ($tables[1])? $($tables[1]): null;
 			
 			this._parseESLTable('t0', t0, function () {
+				delete t0;
+				
 				if (t1) {
 					this._parseESLTable('t1', t1, function () {
-						this._core.emit('endParse');
+						delete t1;
+						this._core.emit('endParse');		
 					}.bind(this));
 				} else {
 					this._core.emit('endParse');
@@ -100,6 +103,8 @@
 			this.error('no parse data');
 			this._core.emit('endParse');
 		};
+		
+		delete data;
 	};
 	
 	ESLData.prototype._parseESLTable = function (name, $tbl, callback) {

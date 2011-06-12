@@ -17,7 +17,7 @@
 		var a = arr.slice(0);
 		var n = 0;
 		
-		function getE () {
+		var getE = function () {
 			//no good, but need...
 			var e = a[n];
 			
@@ -25,9 +25,11 @@
 				n += 1;
 				setTimeout(getE, 0);
 			};
+			
 		};
 		
 		getE();
+		delete a;
 	};
 	
 	rz.util = util;
